@@ -28,22 +28,32 @@ class FiniteAutomata:
                 
             else:
                 self.graph[source][destiny].append(symbol)
-        print(self.graph)
+        # print(self.graph)
     
     
-    def isDeterministic(self):
-        for d1 in self.graph:
-            for i in range(0,len(d1)):
-                if(d1[i] ==''):
+    def __isDeterministic(self):
+        temp = self.graph
+        for m in range(0,len(temp)):
+            print(temp[m])
+            for i in range(0,len(temp[m])):
+                if(temp[m][i] ==''):
                     continue
-                for j in range(i+1,len(d1)):
-                    if(d1[i]==d1[j]):
-                        return False
+                for j in range(0,len(temp[m][i])):
+                    for u in range(i+1,len(temp[m])):
+                        if(temp[m][i][j] in temp[m][u]):
+                            return False
 
-        return True
+        return True    
+                
+    def __toDeterministic(self):
+        delta =[]
 
-    def toDeterministic(self):
-        ...
     
     def stringIsPossible(self):
-        ...
+        # print(self.graph)
+        if(not self.__isDeterministic()):
+            # self.toDeterministic()
+            return "Não deterministico"
+        else:
+            return "Deterministico"
+        
