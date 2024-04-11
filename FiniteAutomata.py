@@ -28,17 +28,19 @@ class FiniteAutomata:
                 
             else:
                 self.graph[source][destiny].append(symbol)
-            
+        print(self.graph)
     
     
-            
-
-        
-
-
     def isDeterministic(self):
-        print("Deterministic")
-        print(self.stateTransition)
+        for d1 in self.graph:
+            for i in range(0,len(d1)):
+                if(d1[i] ==''):
+                    continue
+                for j in range(i+1,len(d1)):
+                    if(d1[i]==d1[j]):
+                        return False
+
+        return True
 
     def toDeterministic(self):
         ...

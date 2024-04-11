@@ -29,5 +29,8 @@ from FiniteAutomata import FiniteAutomata
 
 
 aut = FiniteAutomata(3,"2 a b",["0 a 1",'0 b 1','1 a 1','1 b 2','2 a 0','2 b 2'],0,[2])
+# aut = FiniteAutomata(4,"2 a b",["0 a 1","0 a 2","1 b 3","2 a 3"],0,[3])
+# aut = FiniteAutomata(3,"2 1 0",["0 0 0","0 1 1","1 0 2","1 1 0","2 1 2","2 0 1"],0,[2])
 
-aut.isDeterministic()
+
+print(aut.isDeterministic())
