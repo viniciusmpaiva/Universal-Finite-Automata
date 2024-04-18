@@ -30,11 +30,11 @@ from FiniteAutomata import FiniteAutomata
 #     transitions.append(input("Transition: "))
 
 
-# aut = FiniteAutomata(3,"2 a b",["0 a 1",'0 b 1','1 a 1','1 b 2','2 a 0','2 b 2'],[[2]]) 
+# aut = FiniteAutomata(3,"2 a b",["0 a 1",'0 b 1','1 a 1','1 b 2','2 a 0','2 b 2'],[2]) 
 #N deterministico
-# aut = FiniteAutomata(4,"2 a b",["0 a 1","0 a 2","1 b 3","2 a 3"],[[3]]) 
+# aut = FiniteAutomata(4,"2 a b",["0 a 1","0 a 2","1 b 3","2 a 3"],[3]) 
 #Deterministico
-# aut = FiniteAutomata(3,"2 1 0",["0 0 0","0 1 1","1 0 2","1 1 0","2 1 2","2 0 1"],[[2]])
+# aut = FiniteAutomata(3,"2 1 0",["0 0 0","0 1 1","1 0 2","1 1 0","2 1 2","2 0 1"],[2])
 #Deterministico 
 aut = FiniteAutomata(3,['a','b'],["0 b 0","0 a 1","0 a 2","0 b 2","1 a 1","1 b 1","2 a 1"],[1])
 #N Deterministico
@@ -44,4 +44,4 @@ aut = FiniteAutomata(3,['a','b'],["0 b 0","0 a 1","0 a 2","0 b 2","1 a 1","1 b 1
 #N Deterministico
 
 
-print(aut.stringIsPossible())
+print(aut.validateString("bbbabaaaa"))
