@@ -84,30 +84,6 @@ class FiniteAutomata:
 
         self.__updateAutomata(delta,transitions)
         
-        
-            # self.__updateAutomata(delta,transitions)         
-        #A tabela delta serão os novos estados
-        #Na entrada "0 b 0","0 a 1","0 a 2","0 b 2","1 a 1","1 b 1","2 a 1" A tabela no papel ficaria:
-        #Delta          a           b
-        #q0             q12         q02
-        #q12            q1          q1
-        #q02            q12         q02
-        #q1             q1          q1
-
-        #No nosso codigo, esta tabela se apresenta por meio de 2 matrizes: delta e transtions. 
-        #A matriz delta representa os novos estados, já a transitions, as colunas a e b da tabela anterior, com o indice
-        #0 sendo o do primeiro simbolo terminal (no exemplo, a), o indice 1 o segundo, e assim em diante
-
-        #portando, a saída, nesse exemplo será:
-        #delta=[                transtions=[
-        #   [0],                    [[1,2],     [[0,2], 
-        #   [1,2],                   [1],        [1],   
-        #   [0,2],                   [1,2],      [0,2],   
-        #   [1],                     [1]],       [1]]   
-        #]                                                 ]
-
-    
-
 
     def __updateAutomata(self,delta,transitions):
         self.stateSet = len(delta)
@@ -165,7 +141,6 @@ class FiniteAutomata:
         if(self.__isDeterministic()):
             self.__toDeterministic()
         
-
         currentState = 0
         for letter in string:
             for i in range(0,len(self.graph[currentState])):
@@ -174,5 +149,5 @@ class FiniteAutomata:
                     break
         for state in self.acceptenceStates:
             if(currentState == state):
-                return True
-        return False
+                return 'aceita'
+        return 'rejeita'
