@@ -1,9 +1,17 @@
 from FiniteAutomata import FiniteAutomata
 
 numStates = int(input("Number of states: "))
+if(numStates<1 or numStates>10):
+    print("Invalid number of states")
+    exit()
+
 terAlphTxt = input("Terminal symbols: ")
 
 numTerAlph = int(terAlphTxt[0])
+if(numTerAlph<1 or numTerAlph>10):
+    print("Invalid number of terminal symbols")
+    exit()
+
 termAlphSet = []
 
 for i in range(1,len(terAlphTxt)):
@@ -15,19 +23,30 @@ for i in range(1,len(terAlphTxt)):
 accStatesTxt = input("Acceptance states: ")
 numAccStates = int(accStatesTxt[0])
 
+if(numAccStates>numStates):
+    print("Invalid number of acceptance states")
+    exit()
+
 accStates=[]
 for i in range(1,len(accStatesTxt)):
     if(accStatesTxt[i].isspace()):
         continue
+    if(int(accStatesTxt[i])>numStates):
+        print("Invalid acceptance state")
+        exit()
     accStates.append(int(accStatesTxt[i]))
 
 
 numTrans = int(input("Number of transitions: "))
 transitions=[]
+if(numTrans>50 or numTrans<1):
+    print("Invalid number of transitions")
+    exit()
+
 for i in range(0,numTrans):
     transitions.append(input("Transition: "))
 
-aut = FiniteAutomata(3,['a','b'],["0 b 0","0 a 1","0 a 2","0 b 2","1 a 1","1 b 1","2 a 1"],[1])
+aut = FiniteAutomata(numStates,termAlphSet,transitions,accStates)
 
 
 
@@ -45,10 +64,17 @@ aut = FiniteAutomata(3,['a','b'],["0 b 0","0 a 1","0 a 2","0 b 2","1 a 1","1 b 1
 
 
 numStrings= int(input("Number of strings: "))
+if(numStrings>10):
+    print("Invalid number of strings")
+    exit()
 strings=[]
 for i in range(0,numStrings):
     string = input("String: ")
+    if(len(string)>20):
+        print("Invalid string length")
+        exit()
     strings.append(string)
+    
 
 for string in strings:
     print(aut.validateString(string))

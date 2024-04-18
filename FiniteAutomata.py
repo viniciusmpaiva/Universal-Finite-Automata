@@ -9,6 +9,7 @@ class FiniteAutomata:
         self.acceptenceStates = acceptanceStates
         
         self.__buildGraph()
+        self.__buildAutomata()
     
     
     def __isDeterministic(self):
@@ -137,9 +138,14 @@ class FiniteAutomata:
         self.__buildGraph()
             
     
-    def validateString(self,string):
-        if(self.__isDeterministic()):
+    
+
+    def __buildAutomata(self):
+        if(not self.__isDeterministic()):
             self.__toDeterministic()
+        
+
+    def validateString(self,string):
         
         currentState = 0
         for letter in string:
