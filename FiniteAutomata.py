@@ -7,8 +7,7 @@ class FiniteAutomata:
         self.terminalAlphabet = terminalAlphabet
         self.stateTransition = stateTransition
         self.acceptenceStates = acceptanceStates
-        self.graph =[]
-
+        
         self.__buildGraph()
     
     
@@ -28,13 +27,16 @@ class FiniteAutomata:
 
 
     def __buildGraph(self):
-        for i in range(0,self.stateSet):
+
+        self.graph = []
+
+        for i in range(0,self.stateSet+1):
             a=[]
-            for j in range(0,self.stateSet):
+            for j in range(0,self.stateSet+1):
                 a.append('')
             self.graph.append(a)
         
-
+        
         for i in self.stateTransition:
             parts = i.split()
             source = int(parts[0])
@@ -126,8 +128,6 @@ class FiniteAutomata:
 
         newState = self.stateSet -1
         hashMap={}
-        print(delta)
-        print(transitions)
         for item in delta:
             if(len(item)>1 and f'{item}' not in hashMap):
                 hashMap[f'{item}'] = newState
@@ -140,7 +140,7 @@ class FiniteAutomata:
 
             for i in range(0,len(self.terminalAlphabet)):
                 if(transitions[i][j] == []): continue
-                if(f"{transitions[i][j]}" not in hashMap and len(transitions[i][i])>1):
+                if(f"{transitions[i][j]}" not in hashMap and len(transitions[i][j])>1):
                     hashMap[f'{transitions[i][j]}'] = newState
                     transitions_txt = newState
                     newState+=1
@@ -152,25 +152,27 @@ class FiniteAutomata:
                 u+=1
             j+=1
                 
-        print(self.acceptenceStates)
-        print(delta)
-        print(self.stateTransition)
-        print(hashMap)
 
         temp_accStates = self.acceptenceStates
         for acc in temp_accStates:
             for item in delta:
                 if(acc in item and len(item)>1 ):
                     self.acceptenceStates.append(hashMap[f'{item}'])
-        print(self.acceptenceStates)
-        
-
-
-    def stringIsPossible(self):
-        if( not self.__isDeterministic()): 
-            print("N deterministico")
+        self.__buildGraph()
+            
+    
+    def validateString(self,string):
+        if(self.__isDeterministic()):
             self.__toDeterministic()
-        else:
-            print("deterministico")    
-        # print(self.graph)
         
+
+        currentState = 0
+        for letter in string:
+            for i in range(0,len(self.graph[currentState])):
+                if(letter in self.graph[currentState][i]):
+                    currentState = i
+                    break
+        for state in self.acceptenceStates:
+            if(currentState == state):
+                return True
+        return False
