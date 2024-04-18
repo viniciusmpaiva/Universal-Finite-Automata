@@ -2,12 +2,12 @@
 class FiniteAutomata:
     
 
-    def __init__(self,stateSet,terminalAlphabet,stateTransition,initialState,acceptanceStates):
+    def __init__(self,stateSet,terminalAlphabet,stateTransition,acceptanceStates):
         self.stateSet = stateSet
         self.terminalAlphabet = terminalAlphabet
         self.stateTransition = stateTransition
-        self.initialState = initialState
         self.acceptenceStates = acceptanceStates
+        self.graph =[]
 
         self.__buildGraph()
     
@@ -28,7 +28,6 @@ class FiniteAutomata:
 
 
     def __buildGraph(self):
-        self.graph=[]
         for i in range(0,self.stateSet):
             a=[]
             for j in range(0,self.stateSet):
@@ -50,12 +49,14 @@ class FiniteAutomata:
 
 
     def __toDeterministic(self):
+
         delta =[[0]]
         transitions=[]
-        for alphabet in self.terminalAlphabet :
+        for i in range(0,len(self.terminalAlphabet)) :
             temp=[]
             transitions.append(temp)
         
+
 
         for i in range(0,len(self.terminalAlphabet)):
             temp=[]
@@ -63,11 +64,10 @@ class FiniteAutomata:
                 if self.terminalAlphabet[i] in self.graph[0][j]:
                     temp.append(j)
                 
-                if(temp not in transitions[i]):transitions[i].append(temp)
+            if(temp not in transitions[i]):transitions[i].append(temp)
             if(len(temp)>0):  delta.append(temp)
         i=1
 
-        print(delta)
         while i <len(delta):
             for letter in range(0,len(self.terminalAlphabet)):
                 temp=[]
@@ -78,10 +78,13 @@ class FiniteAutomata:
                             temp.append(w)
                 transitions[letter].append(temp)
                 if(temp not in delta and len(temp)>0):delta.append(temp)
-            i+=1
+            i+=1       
 
-
-        #A tebla delta serão os novos estados
+        self.__updateAutomata(delta,transitions)
+        
+        
+            # self.__updateAutomata(delta,transitions)         
+        #A tabela delta serão os novos estados
         #Na entrada "0 b 0","0 a 1","0 a 2","0 b 2","1 a 1","1 b 1","2 a 1" A tabela no papel ficaria:
         #Delta          a           b
         #q0             q12         q02
@@ -101,16 +104,73 @@ class FiniteAutomata:
         #   [1],                     [1]],       [1]]   
         #]                                                 ]
 
-        print(f'delta = {delta}')   
-        print(f'transitions = {transitions}')
-            
-                
     
+
+
+    def __updateAutomata(self,delta,transitions):
+        self.stateSet = len(delta)
+        u=0
+        j=0
+        count=0
+    
+        for trans in transitions:
+            count+=len(trans)
+        count_blank=0
+        if(len(self.stateTransition)>count):
+            del self.stateTransition[count:]
+        elif(len(self.stateTransition)<count):
+            for item in transitions:
+                count_blank += item.count([])
+            for i in range(0,count-len(self.stateTransition)-count_blank):
+                self.stateTransition.append("")
+
+        newState = self.stateSet -1
+        hashMap={}
+        print(delta)
+        print(transitions)
+        for item in delta:
+            if(len(item)>1 and f'{item}' not in hashMap):
+                hashMap[f'{item}'] = newState
+                item_txt = newState
+                newState+=1
+            elif(len(item)>1):
+                item_txt = hashMap[f'{item}']
+            else:
+                item_txt=', '.join(map(str,item))
+
+            for i in range(0,len(self.terminalAlphabet)):
+                if(transitions[i][j] == []): continue
+                if(f"{transitions[i][j]}" not in hashMap and len(transitions[i][i])>1):
+                    hashMap[f'{transitions[i][j]}'] = newState
+                    transitions_txt = newState
+                    newState+=1
+                elif(len(transitions[i][j])>1):
+                    transitions_txt = hashMap[f'{transitions[i][j]}']
+                else:
+                    transitions_txt = f'{transitions[i][j][0]}'
+                self.stateTransition[u] = f'{item_txt} {self.terminalAlphabet[i]} {transitions_txt}'
+                u+=1
+            j+=1
+                
+        print(self.acceptenceStates)
+        print(delta)
+        print(self.stateTransition)
+        print(hashMap)
+
+        temp_accStates = self.acceptenceStates
+        for acc in temp_accStates:
+            for item in delta:
+                if(acc in item and len(item)>1 ):
+                    self.acceptenceStates.append(hashMap[f'{item}'])
+        print(self.acceptenceStates)
+        
+
+
     def stringIsPossible(self):
         if( not self.__isDeterministic()): 
             print("N deterministico")
+            self.__toDeterministic()
         else:
             print("deterministico")    
-        self.__toDeterministic()
-        print(self.graph)
+        # print(self.graph)
         
